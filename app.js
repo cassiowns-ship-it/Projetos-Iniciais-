@@ -1,68 +1,41 @@
-let listaNumeroSorteados = [];
-let numeroLimite = 10;
-let numeroSecreto = gerarNumeroAleatorio();
-let tentativas = 1;
+//O principal objetivo deste desafio é fortalecer suas habilidades em lógica de programação. Aqui você deverá desenvolver a lógica para resolver o problema.
+let amigos = [];
+//Adciona novos amigos 
+function adicionarAmigo(){
+    let inputAmigo = document.getElementById('amigo');
+    let nomeAmigo = inputAmigo.value;
 
-function exibirTextoNaTela (tag, texto){
-    let campo = document.querySelector(tag);
-    campo.innerHTML = texto;
+    if (!nomeAmigo) {//emite um alerta caso o scampo esteja vazio
+        alert('Digite o nome do amigo!');
+        return;
+    }
+    amigos.push(nomeAmigo);
+    inputAmigo.value = '';
+    inputAmigo.focus();
+    atualizarLista();
 }
+//Atualiza a lista de amigos
+function atualizarLista(){
+    let listaAmigos = document.getElementById('listaAmigos');
+    listaAmigos.innerHTML = '';
 
-function exibirMensagemInicial(){
-    exibirTextoNaTela ('h1', 'Jogo do número secreto');
-    exibirTextoNaTela ('p', 'Escolha um número entre 1 e 10');
-}
-
-exibirMensagemInicial();
-
-function verificarChute() {
-    let chute = document.querySelector('input').value;
-    
-    if (chute == numeroSecreto) {
-        exibirTextoNaTela('h1','Acertou!');
-        let palavraTentativa = tentativas > 1 ? 'Tentativas' : 'Tentativa';
-        let mensagemTentativas = `Você descobriu o número secreto com ${tentativas} ${palavraTentativa}!`;
-        exibirTextoNaTela('p',mensagemTentativas);
-        document.getElementById('reiniciar').removeAttribute('disabled');
-    } else {
-        if(chute > numeroSecreto) {
-            exibirTextoNaTela('p','O número secreto é menor!');
-        }else {
-            exibirTextoNaTela('p','O número secreto é maior!');
-        }
-        tentativas++;
-        limparCampo()
-        
+    for(let i = 0; i < amigos.length; i++){
+        let item = document.createElement('li');
+        item.textContent = amigos[i];
+        listaAmigos.appendChild(item);
     }
 }
-
- function gerarNumeroAleatorio () {
-    let numeroEscolhido = parseInt(Math.random () * numeroLimite + 1);
-    let quantidadeElementosNaLista = listaNumeroSorteados.length;
-
-    if(quantidadeElementosNaLista == numeroLimite){
-        listaNumeroSorteados = [];
+//função para sortear os nomes da lista  
+function sortearAmigo(){
+    if(amigos.length === 0){
+        alert('Nenhum amigo adicionado!');
+        return;
     }
+    let sorteado = amigos[Math.floor(Math.random() * amigos.length)];
+    let resultado = document.getElementById('resultado');
+    resultado.innerHTML = `O amigo sorteado foi: ${sorteado}`;
 
-    if (listaNumeroSorteados.includes(numeroEscolhido) ) {
-        return gerarNumeroAleatorio();
-    } else {
-        listaNumeroSorteados.push(numeroEscolhido);
-        console.log(listaNumeroSorteados);
-        return numeroEscolhido;
-    }
+    let limparLista = document.getElementById('listaAmigos');
+    limparLista.innerHTML = '';
+}
 
- }
-
- function limparCampo () {
-    chute = document.querySelector('input');
-    chute.value = '';
- }
-
- function reiniciarJogo() {
-    numerosecreto = gerarNumeroAleatorio();
-    limparCampo();
-    tentativas = 1;
-    exibirMensagemInicial();
-    document.getElementById('reiniciar').setAttribute('disabled',true);
- }
